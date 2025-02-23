@@ -33981,9 +33981,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#solution-1" class="md-nav__link">
+  <a href="#solution-1-data-structure" class="md-nav__link">
     <span class="md-ellipsis">
-      Solution 1
+      Solution 1: Data Structure
     </span>
   </a>
   
@@ -86421,8 +86421,16 @@ skiplist.search(1); // return False, 1 has already been erased.</pre>
 <h2 id="solutions">Solutions</h2>
 <!-- solution:start -->
 
-<h3 id="solution-1">Solution 1</h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python3</label><label for="__tabbed_1_2">Java</label><label for="__tabbed_1_3">C++</label><label for="__tabbed_1_4">Go</label></div>
+<h3 id="solution-1-data-structure">Solution 1: Data Structure</h3>
+<p>The core idea of a skip list is to use multiple "levels" to store data, with each level acting as an index. Data starts from the bottom level linked list and gradually rises to higher levels, eventually forming a multi-level linked list structure. Each level's nodes only contain part of the data, allowing for jumps to reduce search time.</p>
+<p>In this problem, we use a <span class="arithmatex">\(\textit{Node}\)</span> class to represent the nodes of the skip list. Each node contains a <span class="arithmatex">\(\textit{val}\)</span> field and a <span class="arithmatex">\(\textit{next}\)</span> array. The length of the array is <span class="arithmatex">\(\textit{level}\)</span>, indicating the next node at each level. We use a <span class="arithmatex">\(\textit{Skiplist}\)</span> class to implement the skip list operations.</p>
+<p>The skip list contains a head node <span class="arithmatex">\(\textit{head}\)</span> and the current maximum level <span class="arithmatex">\(\textit{level}\)</span>. The head node's value is set to <span class="arithmatex">\(-1\)</span> to mark the starting position of the list. We use a dynamic array <span class="arithmatex">\(\textit{next}\)</span> to store pointers to successor nodes.</p>
+<p>For the <span class="arithmatex">\(\textit{search}\)</span> operation, we start from the highest level of the skip list and traverse downwards until we find the target node or determine that the target node does not exist. At each level, we use the <span class="arithmatex">\(\textit{find\_closest}\)</span> method to jump to the node closest to the target.</p>
+<p>For the <span class="arithmatex">\(\textit{add}\)</span> operation, we first randomly decide the level of the new node. Then, starting from the highest level, we find the node closest to the new value at each level and insert the new node at the appropriate position. If the level of the inserted node is greater than the current maximum level of the skip list, we need to update the level of the skip list.</p>
+<p>For the <span class="arithmatex">\(\textit{erase}\)</span> operation, similar to the search operation, we traverse each level of the skip list to find and delete the target node. When deleting a node, we need to update the <span class="arithmatex">\(\textit{next}\)</span> pointers at each level. If the highest level of the skip list has no nodes, we need to decrease the level of the skip list.</p>
+<p>Additionally, we define a <span class="arithmatex">\(\textit{random\_level}\)</span> method to randomly decide the level of the new node. This method generates a random number between <span class="arithmatex">\([1, \textit{max\_level}]\)</span> until the generated random number is greater than or equal to <span class="arithmatex">\(\textit{p}\)</span>. We also have a <span class="arithmatex">\(\textit{find\_closest}\)</span> method to find the node closest to the target value at each level.</p>
+<p>The time complexity of the above operations is <span class="arithmatex">\(O(\log n)\)</span>, where <span class="arithmatex">\(n\)</span> is the number of nodes in the skip list. The space complexity is <span class="arithmatex">\(O(n)\)</span>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python3</label><label for="__tabbed_1_2">Java</label><label for="__tabbed_1_3">C++</label><label for="__tabbed_1_4">Go</label><label for="__tabbed_1_5">TypeScript</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
@@ -87069,6 +87077,186 @@ skiplist.search(1); // return False, 1 has already been erased.</pre>
 <span class="cm"> * param_1 := obj.Search(target);</span>
 <span class="cm"> * obj.Add(num);</span>
 <span class="cm"> * param_3 := obj.Erase(num);</span>
+<span class="cm"> */</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nx">Node</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">val</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">next</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">Node</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kc">null</span><span class="p">)[];</span>
+
+<span class="w">    </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">val</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">,</span><span class="w"> </span><span class="nx">level</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">val</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Array</span><span class="p">(</span><span class="nx">level</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">Skiplist</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="nx">maxLevel</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">32</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="nx">p</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.25</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="nx">head</span><span class="o">:</span><span class="w"> </span><span class="kt">Node</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="nx">level</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kr">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Node</span><span class="p">(</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">Skiplist</span><span class="p">.</span><span class="nx">maxLevel</span><span class="p">);</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">search</span><span class="p">(</span><span class="nx">target</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nx">curr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">;</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">let</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">level</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">--</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">curr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">findClosest</span><span class="p">(</span><span class="nx">curr</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">target</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">curr</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">curr</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="o">!</span><span class="p">.</span><span class="nx">val</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">add</span><span class="p">(</span><span class="nx">num</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="ow">void</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nx">curr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">randomLevel</span><span class="p">();</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Node</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span><span class="w"> </span><span class="nx">level</span><span class="p">);</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">level</span><span class="p">,</span><span class="w"> </span><span class="nx">level</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">let</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">level</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">--</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">curr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">findClosest</span><span class="p">(</span><span class="nx">curr</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">num</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">level</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">node</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">curr</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+<span class="w">                </span><span class="nx">curr</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">node</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">erase</span><span class="p">(</span><span class="nx">num</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nx">curr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">let</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">level</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">--</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">curr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">findClosest</span><span class="p">(</span><span class="nx">curr</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">num</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">curr</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">curr</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="o">!</span><span class="p">.</span><span class="nx">val</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">num</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">curr</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">curr</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="o">!</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+<span class="w">                </span><span class="nx">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">level</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">level</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1</span><span class="p">]</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="nx">level</span><span class="o">--</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">ok</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="nx">findClosest</span><span class="p">(</span><span class="nx">curr</span><span class="o">:</span><span class="w"> </span><span class="kt">Node</span><span class="p">,</span><span class="w"> </span><span class="nx">level</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">,</span><span class="w"> </span><span class="nx">target</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nx">Node</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nx">curr</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">level</span><span class="p">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">curr</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">level</span><span class="p">]</span><span class="o">!</span><span class="p">.</span><span class="nx">val</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">curr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">curr</span><span class="p">.</span><span class="nx">next</span><span class="p">[</span><span class="nx">level</span><span class="p">]</span><span class="o">!</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">curr</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="nx">randomLevel</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nx">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nx">level</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">Skiplist</span><span class="p">.</span><span class="nx">maxLevel</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">Skiplist</span><span class="p">.</span><span class="nx">p</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">level</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">level</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Your Skiplist object will be instantiated and called as such:</span>
+<span class="cm"> * var obj = new Skiplist()</span>
+<span class="cm"> * var param_1 = obj.search(target)</span>
+<span class="cm"> * obj.add(num)</span>
+<span class="cm"> * var param_3 = obj.erase(num)</span>
 <span class="cm"> */</span>
 </code></pre></div></td></tr></table></div>
 </div>
