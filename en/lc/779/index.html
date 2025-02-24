@@ -24597,18 +24597,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#solution-1" class="md-nav__link">
+  <a href="#solution-1-recursion" class="md-nav__link">
     <span class="md-ellipsis">
-      Solution 1
+      Solution 1: Recursion
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#solution-2" class="md-nav__link">
+  <a href="#solution-2-bit-manipulation-brain-teaser" class="md-nav__link">
     <span class="md-ellipsis">
-      Solution 2
+      Solution 2: Bit Manipulation + Brain Teaser
     </span>
   </a>
   
@@ -86519,7 +86519,7 @@
 <pre>
 <strong>Input:</strong> n = 2, k = 1
 <strong>Output:</strong> 0
-<strong>Explanation:</strong> 
+<strong>Explanation:</strong>
 row 1: 0
 row 2: <u>0</u>1
 </pre>
@@ -86529,7 +86529,7 @@ row 2: <u>0</u>1
 <pre>
 <strong>Input:</strong> n = 2, k = 2
 <strong>Output:</strong> 1
-<strong>Explanation:</strong> 
+<strong>Explanation:</strong>
 row 1: 0
 row 2: 0<u>1</u>
 </pre>
@@ -86547,8 +86547,20 @@ row 2: 0<u>1</u>
 <h2 id="solutions">Solutions</h2>
 <!-- solution:start -->
 
-<h3 id="solution-1">Solution 1</h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python3</label><label for="__tabbed_1_2">Java</label><label for="__tabbed_1_3">C++</label><label for="__tabbed_1_4">Go</label></div>
+<h3 id="solution-1-recursion">Solution 1: Recursion</h3>
+<p>Let's first observe the pattern of the first few rows:</p>
+<div class="highlight"><pre><span></span><code>n = 1: 0
+n = 2: 0 1
+n = 3: 0 1 1 0
+n = 4: 0 1 1 0 1 0 0 1
+n = 5: 0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0
+...
+</code></pre></div>
+<p>We can see that the first half of each row is exactly the same as the previous row, and the second half is the inversion of the previous row. Note that "inversion" here means changing <span class="arithmatex">\(0\)</span> to <span class="arithmatex">\(1\)</span> and <span class="arithmatex">\(1\)</span> to <span class="arithmatex">\(0\)</span>.</p>
+<p>If <span class="arithmatex">\(k\)</span> is in the first half, then the <span class="arithmatex">\(k\)</span>-th character is the same as the <span class="arithmatex">\(k\)</span>-th character of the previous row, so we can directly recurse with <span class="arithmatex">\(kthGrammar(n - 1, k)\)</span>.</p>
+<p>If <span class="arithmatex">\(k\)</span> is in the second half, then the <span class="arithmatex">\(k\)</span>-th character is the inversion of the <span class="arithmatex">\((k - 2^{n - 2})\)</span>-th character of the previous row, i.e., <span class="arithmatex">\(kthGrammar(n - 1, k - 2^{n - 2}) \oplus 1\)</span>.</p>
+<p>The time complexity is <span class="arithmatex">\(O(n)\)</span>, and the space complexity is <span class="arithmatex">\(O(n)\)</span>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python3</label><label for="__tabbed_1_2">Java</label><label for="__tabbed_1_3">C++</label><label for="__tabbed_1_4">Go</label><label for="__tabbed_1_5">TypeScript</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
@@ -86628,14 +86640,50 @@ row 2: 0<u>1</u>
 <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 </div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">kthGrammar</span><span class="p">(</span><span class="nx">n</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">,</span><span class="w"> </span><span class="nx">k</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">k</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">2</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">kthGrammar</span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">k</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">kthGrammar</span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">k</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="mf">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">2</span><span class="p">)))</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+</div>
 </div>
 </div>
 <!-- solution:end -->
 
 <!-- solution:start -->
 
-<h3 id="solution-2">Solution 2</h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:4"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Python3</label><label for="__tabbed_2_2">Java</label><label for="__tabbed_2_3">C++</label><label for="__tabbed_2_4">Go</label></div>
+<h3 id="solution-2-bit-manipulation-brain-teaser">Solution 2: Bit Manipulation + Brain Teaser</h3>
+<p>In the problem, the index starts from <span class="arithmatex">\(1\)</span>. We will change <span class="arithmatex">\(k\)</span> to <span class="arithmatex">\(k-1\)</span>, converting the index to start from <span class="arithmatex">\(0\)</span>. In the following discussion, all indices start from <span class="arithmatex">\(0\)</span>.</p>
+<p>Upon closer observation, the <span class="arithmatex">\(i\)</span>-th character in a row generates two characters at positions <span class="arithmatex">\(2i\)</span> and <span class="arithmatex">\(2i+1\)</span> in the next row.</p>
+<div class="highlight"><pre><span></span><code>0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0
+</code></pre></div>
+<p>If the <span class="arithmatex">\(i\)</span>-th character is <span class="arithmatex">\(0\)</span>, then the characters generated at positions <span class="arithmatex">\(2i\)</span> and <span class="arithmatex">\(2i+1\)</span> are <span class="arithmatex">\(0\)</span> and <span class="arithmatex">\(1\)</span>, respectively. If the <span class="arithmatex">\(i\)</span>-th character is <span class="arithmatex">\(1\)</span>, the generated characters are <span class="arithmatex">\(1\)</span> and <span class="arithmatex">\(0\)</span>.</p>
+<div class="highlight"><pre><span></span><code>0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0
+      ^     * *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0
+        ^       * *
+</code></pre></div>
+<p>We can see that the character at position <span class="arithmatex">\(2i\)</span> (even index) is always the same as the character at position <span class="arithmatex">\(i\)</span>, while the character at position <span class="arithmatex">\(2i+1\)</span> (odd index) is the inversion of the character at position <span class="arithmatex">\(i\)</span>. In other words, characters at odd indices are always the result of one inversion. If the number of inversions is even, the character remains unchanged; if the number of inversions is odd, it is equivalent to one inversion.</p>
+<p>Therefore, we only need to check whether <span class="arithmatex">\(k\)</span> is odd. If it is, we accumulate one inversion. Then, we divide <span class="arithmatex">\(k\)</span> by <span class="arithmatex">\(2\)</span> and continue to check, accumulating the number of inversions until <span class="arithmatex">\(k\)</span> becomes <span class="arithmatex">\(0\)</span>.</p>
+<p>Finally, we determine whether the number of inversions is odd. If it is, the answer is <span class="arithmatex">\(1\)</span>; otherwise, it is <span class="arithmatex">\(0\)</span>.</p>
+<p>The process of accumulating the number of inversions is essentially equivalent to counting the number of <span class="arithmatex">\(1\)</span>s in the binary representation of <span class="arithmatex">\(k\)</span>.</p>
+<p>The time complexity is <span class="arithmatex">\(O(\log k)\)</span>, and the space complexity is <span class="arithmatex">\(O(1)\)</span>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:5"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><input id="__tabbed_2_5" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Python3</label><label for="__tabbed_2_2">Java</label><label for="__tabbed_2_3">C++</label><label for="__tabbed_2_4">Go</label><label for="__tabbed_2_5">TypeScript</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
@@ -86676,6 +86724,32 @@ row 2: 0<u>1</u>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">kthGrammar</span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">k</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">bits</span><span class="p">.</span><span class="nx">OnesCount</span><span class="p">(</span><span class="nb">uint</span><span class="p">(</span><span class="nx">k</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">kthGrammar</span><span class="p">(</span><span class="nx">n</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">,</span><span class="w"> </span><span class="nx">k</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">bitCount</span><span class="p">(</span><span class="nx">k</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">bitCount</span><span class="p">(</span><span class="nx">i</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">((</span><span class="nx">i</span><span class="w"> </span><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x55555555</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">i</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x33333333</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">((</span><span class="nx">i</span><span class="w"> </span><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="mf">2</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x33333333</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="nx">i</span><span class="w"> </span><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="mf">4</span><span class="p">))</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x0f0f0f0f</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="nx">i</span><span class="w"> </span><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="mf">8</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="nx">i</span><span class="w"> </span><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="mf">16</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x3f</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 </div>
