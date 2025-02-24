@@ -24245,9 +24245,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#solution-1" class="md-nav__link">
+  <a href="#solution-1-greedy" class="md-nav__link">
     <span class="md-ellipsis">
-      Solution 1
+      Solution 1: Greedy
     </span>
   </a>
   
@@ -86532,7 +86532,14 @@ A partition like &quot;ababcbacadefegde&quot;, &quot;hijhklij&quot; is incorrect
 <h2 id="solutions">Solutions</h2>
 <!-- solution:start -->
 
-<h3 id="solution-1">Solution 1</h3>
+<h3 id="solution-1-greedy">Solution 1: Greedy</h3>
+<p>We first use an array or hash table <span class="arithmatex">\(\textit{last}\)</span> to record the last occurrence of each letter in the string <span class="arithmatex">\(s\)</span>.</p>
+<p>Next, we use a greedy approach to partition the string into as many segments as possible.</p>
+<p>Traverse the string <span class="arithmatex">\(s\)</span> from left to right, while maintaining the start index <span class="arithmatex">\(j\)</span> and end index <span class="arithmatex">\(i\)</span> of the current segment, both initially set to <span class="arithmatex">\(0\)</span>.</p>
+<p>For each letter <span class="arithmatex">\(c\)</span> visited, get the last occurrence position <span class="arithmatex">\(\textit{last}[c]\)</span>. Since the end index of the current segment must not be less than <span class="arithmatex">\(\textit{last}[c]\)</span>, let <span class="arithmatex">\(\textit{mx} = \max(\textit{mx}, \textit{last}[c])\)</span>.</p>
+<p>When visiting the index <span class="arithmatex">\(\textit{mx}\)</span>, it means the current segment ends. The index range of the current segment is <span class="arithmatex">\([j,.. i]\)</span>, and the length is <span class="arithmatex">\(i - j + 1\)</span>. We add this length to the result array. Then set <span class="arithmatex">\(j = i + 1\)</span> and continue to find the next segment.</p>
+<p>Repeat the above process until the string traversal is complete to get the lengths of all segments.</p>
+<p>Time complexity is <span class="arithmatex">\(O(n)\)</span>, and space complexity is <span class="arithmatex">\(O(|\Sigma|)\)</span>. Where <span class="arithmatex">\(n\)</span> is the length of the string <span class="arithmatex">\(s\)</span>, and <span class="arithmatex">\(|\Sigma|\)</span> is the size of the character set. In this problem, <span class="arithmatex">\(|\Sigma| = 26\)</span>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:8"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><input id="__tabbed_1_7" name="__tabbed_1" type="radio" /><input id="__tabbed_1_8" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python3</label><label for="__tabbed_1_2">Java</label><label for="__tabbed_1_3">C++</label><label for="__tabbed_1_4">Go</label><label for="__tabbed_1_5">TypeScript</label><label for="__tabbed_1_6">Rust</label><label for="__tabbed_1_7">JavaScript</label><label for="__tabbed_1_8">C#</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

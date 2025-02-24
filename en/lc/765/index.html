@@ -24289,9 +24289,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#solution-1" class="md-nav__link">
+  <a href="#solution-1-union-find" class="md-nav__link">
     <span class="md-ellipsis">
-      Solution 1
+      Solution 1: Union-Find
     </span>
   </a>
   
@@ -86539,7 +86539,12 @@
 <h2 id="solutions">Solutions</h2>
 <!-- solution:start -->
 
-<h3 id="solution-1">Solution 1</h3>
+<h3 id="solution-1-union-find">Solution 1: Union-Find</h3>
+<p>We can assign a number to each pair of couples. Person with number <span class="arithmatex">\(0\)</span> and <span class="arithmatex">\(1\)</span> corresponds to couple <span class="arithmatex">\(0\)</span>, person with number <span class="arithmatex">\(2\)</span> and <span class="arithmatex">\(3\)</span> corresponds to couple <span class="arithmatex">\(1\)</span>, and so on. In other words, the person corresponding to <span class="arithmatex">\(row[i]\)</span> has a couple number of <span class="arithmatex">\(\lfloor \frac{row[i]}{2} \rfloor\)</span>.</p>
+<p>If there are <span class="arithmatex">\(k\)</span> pairs of couples who are seated incorrectly with respect to each other, i.e., if <span class="arithmatex">\(k\)</span> pairs of couples are in the same permutation cycle, it will take <span class="arithmatex">\(k-1\)</span> swaps for all of them to be seated correctly.</p>
+<p>Why? Consider the following: we first adjust the positions of a couple to their correct seats. After this, the problem reduces from <span class="arithmatex">\(k\)</span> couples to <span class="arithmatex">\(k-1\)</span> couples. This process continues, and when <span class="arithmatex">\(k = 1\)</span>, the number of swaps required is <span class="arithmatex">\(0\)</span>. Therefore, if <span class="arithmatex">\(k\)</span> pairs of couples are in the wrong positions, we need <span class="arithmatex">\(k-1\)</span> swaps.</p>
+<p>Thus, we only need to traverse the array once, use union-find to determine how many permutation cycles there are. Suppose there are <span class="arithmatex">\(x\)</span> cycles, and the size of each cycle (in terms of couple pairs) is <span class="arithmatex">\(y_1, y_2, \cdots, y_x\)</span>. The number of swaps required is <span class="arithmatex">\(y_1-1 + y_2-1 + \cdots + y_x-1 = y_1 + y_2 + \cdots + y_x - x = n - x\)</span>.</p>
+<p>The time complexity is <span class="arithmatex">\(O(n \times \alpha(n))\)</span>, and the space complexity is <span class="arithmatex">\(O(n)\)</span>, where <span class="arithmatex">\(\alpha(n)\)</span> is the inverse Ackermann function, which can be considered a very small constant.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python3</label><label for="__tabbed_1_2">Java</label><label for="__tabbed_1_3">C++</label><label for="__tabbed_1_4">Go</label><label for="__tabbed_1_5">TypeScript</label><label for="__tabbed_1_6">C#</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
